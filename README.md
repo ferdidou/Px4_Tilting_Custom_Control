@@ -14,10 +14,21 @@ This work is currently under review
 
 
 # How to use
-Clone the repository with submodules <br />
-`git clone --recurse-submodule https://github.com/prisma-lab/Px4_Tilting_Custom_Control.git`
+
+## Setup (Ubuntu 20.04 / 22.04)
+1. Clone the repository **with submodules** (pulls the custom Gazebo models too): <br />
+`git clone --recurse-submodules https://github.com/ferdidou/Px4_Tilting_Custom_Control.git` <br />
+`cd Px4_Tilting_Custom_Control`
+2. Install the PX4 toolchain and dependencies (one time only, then reboot): <br />
+`bash ./Tools/setup/ubuntu.sh` <br />
+3. Build & run a SITL simulation with one of the commands below.
+
+> Already cloned without submodules? Run `git submodule update --init --recursive`.
 
 ## Run the simulation
+For the tilting hexarotor (6 arms, 1 rotor + 1 tilt servo per arm) <br />
+`make px4_sitl gazebo_hexa_tilting`
+
 For omnidirectional tilting drone <br />
 `make px4_sitl gazebo_NDT_tilting`
  or <br />
@@ -27,6 +38,12 @@ For one-tilt tilting drone <br />
 `make px4_sitl gazebo_baby_k`
 or  <br />
 `make px4_sitl gazebo_baby_k_interaction`
+
+### Custom tilting hexarotor model
+Our contribution: a 6-arm tilting hexarotor (1 rotor + 1 tilt servo per arm), added to the standard PX4 tilting stack. <br />
+- Airframe: `ROMFS/.../airframes/25005_gazebo-classic_hexa_tilting` (omnidirectional tilting, `CA_AIRFRAME 13`, `CA_TILTING_TYPE 1`). <br />
+- Gazebo model: `Tools/simulation/gazebo-classic/sitl_gazebo-classic/models/hexa_tilting`. <br />
+- The control allocator was extended from 4 to 6 tilt servos to support this platform. <br />
 
 Trigger the custom flight modes:<br />
 `commander mode prisma:man` to send command through RC<br />
