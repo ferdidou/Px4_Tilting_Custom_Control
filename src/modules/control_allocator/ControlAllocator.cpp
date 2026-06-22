@@ -502,7 +502,9 @@ ControlAllocator::Run()
 
 				// TO DO: add a parameter for the threshold or solve that problem
 
-				if(i<4){
+				// One tilt servo per rotor: works for both the 4-servo X8 (num_actuators[1]==4)
+				// and the 6-servo tilting hexa (num_actuators[1]==6) without hardcoding.
+				if(i < _num_actuators[1]){
 					if( vertlat_actuator_sp(2*i) < 0.1f)
 						servo_sp(i) = 0.0f;
 					else
@@ -511,7 +513,7 @@ ControlAllocator::Run()
 
 				_tilt_debug.data[3*i] =  vertlat_actuator_sp(2*i);
 				_tilt_debug.data[3*i+1] =  vertlat_actuator_sp(2*i+1);
-				if(i<4)
+				if(i < _num_actuators[1])
 					_tilt_debug.data[3*i+2] =  servo_sp(i);
 				_tilt_debug.timestamp = hrt_absolute_time();
 				_debug_array_pub.publish(_tilt_debug);

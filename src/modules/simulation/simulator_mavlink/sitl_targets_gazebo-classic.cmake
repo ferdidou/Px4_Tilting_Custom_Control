@@ -109,6 +109,7 @@ if(gazebo_FOUND)
 		tilting_quadrotor
 		baby_k
 		NDT_tilting_interaction
+		hexa_tilting
 	)
 
 	set(worlds

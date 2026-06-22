@@ -1,0 +1,105 @@
+#!/bin/sh
+#
+# @name Hexa Tilting (6 arms, 1 rotor + 1 tilt servo per arm)
+#
+# @type Tilting Multirotor
+# @class Copter
+#
+# @output MAIN1 motor 1
+# @output MAIN2 motor 2
+# @output MAIN3 motor 3
+# @output MAIN4 motor 4
+# @output MAIN5 motor 5
+# @output MAIN6 motor 6
+# @output MAIN7 servo 1
+# @output MAIN8 servo 2
+# @output MAIN9 servo 3
+# @output MAIN10 servo 4
+# @output MAIN11 servo 5
+# @output MAIN12 servo 6
+#
+# @maintainer Salvatore Marcellini <salvatore.marcellini@gmail.com>
+#
+# NOTE: requires a matching Gazebo model named "hexa_tilting" (6 tilting arms)
+#       in the sitl_gazebo-classic submodule.
+#
+
+. ${R}etc/init.d/rc.mc_defaults
+
+param set-default CA_AIRFRAME 13 #Tilting Multirotor
+param set-default CA_TILTING_TYPE 1 #Omnidirectional tilting drone
+
+set MAV_TYPE 13
+
+# 6 motors + 6 servos -> 12 outputs (mapping done via PWM_MAIN_FUNC below;
+# pwm_out_sim -m sim provides the channels in SITL)
+set PWM_OUT 12345678
+set PWM_AUX_OUT 1234
+param set-default CA_ROTOR_COUNT 6
+param set-default CA_SV_TL_COUNT 6
+
+#X-forward, Y-right (PX4 FRD frame). Canonical PX4 hexa-X layout, copied from
+#the flying typhoon_h480 (rotor positions scaled to 0.35 m), spin alternating
+#around the ring. KM>0 = CCW, KM<0 = CW.
+param set-default CA_ROTOR0_PX 0.00   #90 deg  CW
+param set-default CA_ROTOR0_PY 0.35
+param set-default CA_ROTOR0_PZ 0.00
+param set-default CA_ROTOR0_KM -0.05
+
+param set-default CA_ROTOR1_PX 0.00   #270 deg CCW
+param set-default CA_ROTOR1_PY -0.35
+param set-default CA_ROTOR1_PZ 0.00
+param set-default CA_ROTOR1_KM 0.05
+
+param set-default CA_ROTOR2_PX 0.303  #-30 deg CW
+param set-default CA_ROTOR2_PY -0.175
+param set-default CA_ROTOR2_PZ 0.00
+param set-default CA_ROTOR2_KM -0.05
+
+param set-default CA_ROTOR3_PX -0.303 #150 deg CCW
+param set-default CA_ROTOR3_PY 0.175
+param set-default CA_ROTOR3_PZ 0.00
+param set-default CA_ROTOR3_KM 0.05
+
+param set-default CA_ROTOR4_PX 0.303  #30 deg  CCW
+param set-default CA_ROTOR4_PY 0.175
+param set-default CA_ROTOR4_PZ 0.00
+param set-default CA_ROTOR4_KM 0.05
+
+param set-default CA_ROTOR5_PX -0.303 #210 deg CW
+param set-default CA_ROTOR5_PY -0.175
+param set-default CA_ROTOR5_PZ 0.00
+param set-default CA_ROTOR5_KM -0.05
+
+param set-default PWM_MAIN_FUNC1 101 #esc
+param set-default PWM_MAIN_FUNC2 102
+param set-default PWM_MAIN_FUNC3 103
+param set-default PWM_MAIN_FUNC4 104
+param set-default PWM_MAIN_FUNC5 105
+param set-default PWM_MAIN_FUNC6 106
+param set-default PWM_MAIN_FUNC7 201 #servo
+param set-default PWM_MAIN_FUNC8 202
+param set-default PWM_MAIN_FUNC9 203
+param set-default PWM_MAIN_FUNC10 204
+param set-default PWM_MAIN_FUNC11 205
+param set-default PWM_MAIN_FUNC12 206
+
+# Limits for tilting angles (one per arm)
+param set-default CA_SV_TL0_MAXA 30
+param set-default CA_SV_TL0_MINA -30
+param set-default CA_SV_TL1_MAXA 30
+param set-default CA_SV_TL1_MINA -30
+param set-default CA_SV_TL2_MAXA 30
+param set-default CA_SV_TL2_MINA -30
+param set-default CA_SV_TL3_MAXA 30
+param set-default CA_SV_TL3_MINA -30
+param set-default CA_SV_TL4_MAXA 30
+param set-default CA_SV_TL4_MINA -30
+param set-default CA_SV_TL5_MAXA 30
+param set-default CA_SV_TL5_MINA -30
+
+# NOTE: all PRISMA_* controller parameters are intentionally left at their
+# firmware defaults, exactly like the flying NDT_tilting airframe. The default
+# gains are tuned for a heavy, high-inertia tilting drone, so the Gazebo model
+# (hexa_tilting.sdf) uses the same physical regime as NDT (base 2.5 kg,
+# Ixx=Iyy=0.15, Izz=0.05, arms ~0.40 kg). Re-tune only if needed.

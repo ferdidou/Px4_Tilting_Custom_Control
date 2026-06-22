@@ -90,7 +90,7 @@ protected:
 	bool _tilt_updated{true};
 	int32_t _tilting_type{0};
 
-	static constexpr int NUM_SERVOS_MAX = 5;
+	static constexpr int NUM_SERVOS_MAX = 6;
 	struct ServoParamHandles{
 		param_t angle_min;
 		param_t angle_max;
