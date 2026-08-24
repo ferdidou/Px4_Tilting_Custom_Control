@@ -27,7 +27,7 @@
 . ${R}etc/init.d/rc.mc_defaults
 
 param set-default CA_AIRFRAME 13 #Tilting Multirotor
-param set-default CA_TILTING_TYPE 1 #Omnidirectional tilting drone
+param set-default CA_TILTING_TYPE 1 #Tilting Multirotor
 
 set MAV_TYPE 13
 
@@ -38,8 +38,7 @@ set PWM_AUX_OUT 1234
 param set-default CA_ROTOR_COUNT 6
 param set-default CA_SV_TL_COUNT 6
 
-#X-forward, Y-right (PX4 FRD frame). Canonical PX4 hexa-X layout, copied from
-#the flying typhoon_h480 (rotor positions scaled to 0.35 m), spin alternating
+#X-forward, Y-right (PX4 FRD frame).
 #around the ring. KM>0 = CCW, KM<0 = CW.
 param set-default CA_ROTOR0_PX 0.00   #90 deg  CW
 param set-default CA_ROTOR0_PY 0.35
@@ -98,8 +97,3 @@ param set-default CA_SV_TL4_MINA -30
 param set-default CA_SV_TL5_MAXA 30
 param set-default CA_SV_TL5_MINA -30
 
-# NOTE: all PRISMA_* controller parameters are intentionally left at their
-# firmware defaults, exactly like the flying NDT_tilting airframe. The default
-# gains are tuned for a heavy, high-inertia tilting drone, so the Gazebo model
-# (hexa_tilting.sdf) uses the same physical regime as NDT (base 2.5 kg,
-# Ixx=Iyy=0.15, Izz=0.05, arms ~0.40 kg). Re-tune only if needed.
