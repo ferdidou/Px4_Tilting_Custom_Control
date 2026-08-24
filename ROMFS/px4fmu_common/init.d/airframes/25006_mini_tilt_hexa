@@ -1,0 +1,103 @@
+#!/bin/sh
+#
+# @name Mini-Tilt Hexa (SMART/Saxion, 6 arms, 1 rotor + 1 tilt servo per arm)
+#
+# @type Tilting Multirotor
+# @class Copter
+#
+# @output MAIN1 motor 1
+# @output MAIN2 motor 2
+# @output MAIN3 motor 3
+# @output MAIN4 motor 4
+# @output MAIN5 motor 5
+# @output MAIN6 motor 6
+# @output AUX1 tilt servo 1
+# @output AUX2 tilt servo 2
+# @output AUX3 tilt servo 3
+# @output AUX4 tilt servo 4
+# @output AUX5 tilt servo 5
+# @output AUX6 tilt servo 6
+#
+# @maintainer Ferdi <ckferdi68@gmail.com>
+#
+# Hardware airframe for the SMART "Mini-Tilt Drone" (over-actuated hexa with
+# variable tilt rotors).
+#   - 6 motors  -> MAIN1..6 (I/O PWM rail)
+#   - 6 servos  -> AUX1..6  (FMU PWM rail)
+#
+
+. ${R}etc/init.d/rc.mc_defaults
+
+param set-default CA_AIRFRAME 13 #Tilting Multirotor
+param set-default CA_TILTING_TYPE 1 #Tilting Multirotor
+
+set MAV_TYPE 13
+
+# Start 6 MAIN (motors) + 6 AUX (servos) channels
+set PWM_OUT 123456
+set PWM_AUX_OUT 123456
+
+param set-default CA_ROTOR_COUNT 6
+param set-default CA_SV_TL_COUNT 6
+
+# X-forward, Y-right (PX4 FRD). KM>0 = CCW, KM<0 = CW.
+
+param set-default CA_ROTOR0_PX 0.00   #M1
+param set-default CA_ROTOR0_PY 0.18
+param set-default CA_ROTOR0_PZ 0.00
+param set-default CA_ROTOR0_KM -0.01
+
+param set-default CA_ROTOR1_PX 0.00   #M2
+param set-default CA_ROTOR1_PY -0.18
+param set-default CA_ROTOR1_PZ 0.00
+param set-default CA_ROTOR1_KM 0.01
+
+param set-default CA_ROTOR2_PX 0.16   #M3
+param set-default CA_ROTOR2_PY -0.09
+param set-default CA_ROTOR2_PZ 0.00
+param set-default CA_ROTOR2_KM -0.01
+
+param set-default CA_ROTOR3_PX -0.16  #M4
+param set-default CA_ROTOR3_PY 0.09
+param set-default CA_ROTOR3_PZ 0.00
+param set-default CA_ROTOR3_KM 0.01
+
+param set-default CA_ROTOR4_PX 0.16   #M5
+param set-default CA_ROTOR4_PY 0.09
+param set-default CA_ROTOR4_PZ 0.00
+param set-default CA_ROTOR4_KM 0.01
+
+param set-default CA_ROTOR5_PX -0.16  #M6
+param set-default CA_ROTOR5_PY -0.09
+param set-default CA_ROTOR5_PZ 0.00
+param set-default CA_ROTOR5_KM -0.01
+
+# Motors on MAIN rail
+param set-default PWM_MAIN_FUNC1 101 #esc 1
+param set-default PWM_MAIN_FUNC2 102
+param set-default PWM_MAIN_FUNC3 103
+param set-default PWM_MAIN_FUNC4 104
+param set-default PWM_MAIN_FUNC5 105
+param set-default PWM_MAIN_FUNC6 106
+
+# Tilt servos on AUX rail
+param set-default PWM_AUX_FUNC1 201 #tilt servo 1
+param set-default PWM_AUX_FUNC2 202
+param set-default PWM_AUX_FUNC3 203
+param set-default PWM_AUX_FUNC4 204
+param set-default PWM_AUX_FUNC5 205
+param set-default PWM_AUX_FUNC6 206
+
+# Limits for tilting angles (one per arm), 0 deg = rotor pointing up
+param set-default CA_SV_TL0_MAXA -30
+param set-default CA_SV_TL0_MINA 30
+param set-default CA_SV_TL1_MAXA -30
+param set-default CA_SV_TL1_MINA 30
+param set-default CA_SV_TL2_MAXA -30
+param set-default CA_SV_TL2_MINA 30
+param set-default CA_SV_TL3_MAXA -30
+param set-default CA_SV_TL3_MINA 30
+param set-default CA_SV_TL4_MAXA -30
+param set-default CA_SV_TL4_MINA 30
+param set-default CA_SV_TL5_MAXA -30
+param set-default CA_SV_TL5_MINA 30

@@ -127,5 +127,6 @@ px4_add_romfs_files(
 
 	# CUSTOM #
 	25003_generic_tilting_multirotor
+	25006_mini_tilt_hexa
 	# END-CUSTOM #
 )
