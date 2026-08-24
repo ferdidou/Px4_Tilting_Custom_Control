@@ -490,11 +490,53 @@ ControlAllocator::Run()
 		/*** CUSTOM ***/
 		}
 		else{
-			_control_allocation[0]->setControlSetpoint(c[0]);
+			// Split the setpoint: w = w_F + w_T, allocate each, recombine as x = x_F + K * x_T
+			matrix::Vector<float, NUM_AXES> c_force = c[0];
+			c_force(0) = 0.0f;
+			c_force(1) = 0.0f;
+			c_force(2) = 0.0f;
+
+			matrix::Vector<float, NUM_AXES> c_torque = c[0];
+			c_torque(3) = 0.0f;
+			c_torque(4) = 0.0f;
+			c_torque(5) = 0.0f;
+
+			// x_F = M * w_F. With upward-only rotors, all its vertical components are non-negative
+			_control_allocation[0]->setControlSetpoint(c_force);
 			_control_allocation[0]->allocate();
-			vertlat_actuator_sp = _control_allocation[0]->getActuatorSetpoint();
+			const matrix::Vector<float, NUM_ACTUATORS> vertlat_force_sp = _control_allocation[0]->getActuatorSetpoint();
+
+			// x_T = M * w_T. This is the part that can drive a vertical component negative
+			_control_allocation[0]->setControlSetpoint(c_torque);
+			_control_allocation[0]->allocate();
+			const matrix::Vector<float, NUM_ACTUATORS> vertlat_torque_sp = _control_allocation[0]->getActuatorSetpoint();
+
+			// A negative vertical component cannot be realized by an upward-only rotor, so scale the
+			// torque part down: x = x_F + K * x_T. Per rotor the vertical component is affine in K,
+			// with intercept x_F^v and slope x_T^v, so it reaches zero at K = -x_F^v / x_T^v. Only a
+			// negative slope can cross zero, a positive one never constrains K, hence
+			//     K* = min(1, min{ -x_F^v(i) / x_T^v(i) : x_T^v(i) < 0 })
+			// K* = 1 keeps the full torque (previous behaviour), K* = 0 gives pure force, no torque.
+			float torque_scale = 1.0f;
+
+			for(int i=0; i<_num_actuators[0]; i++){
+
+				// Even indeces correspond to vertical forces
+				const float vert_torque = vertlat_torque_sp(2*i);
+
+				if(vert_torque < -FLT_EPSILON){
+					torque_scale = fminf(torque_scale, -vertlat_force_sp(2*i) / vert_torque);
+				}
+			}
+
+			// Guards against a negative x_F^v, which would otherwise give a negative ratio above
+			torque_scale = fmaxf(torque_scale, 0.0f);
+
+			vertlat_actuator_sp = vertlat_force_sp + vertlat_torque_sp * torque_scale;
 
 			_tilt_debug.id = 0;
+			_tilt_debug.data[3*_num_actuators[0]] = torque_scale;
+
 			for(int i=0; i<_num_actuators[0]; i++){
 
 				// Even indeces correspond to vertical forces
