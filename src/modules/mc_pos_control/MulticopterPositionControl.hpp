@@ -198,7 +198,9 @@ private:
 		(ParamFloat<px4::params::MC_DES_PITCH_MAX>) _param_des_pitch_max,	/**< maximum desired pitch for tilting drones*/
 		(ParamFloat<px4::params::MC_DES_PITCH_MIN>) _param_des_pitch_min,	/**< minimum desired pitch for tilting drones*/
 		(ParamFloat<px4::params::MC_DES_ROLL_MAX>)  _param_des_roll_max,	/**< maximum desired roll for tilting drones*/
-		(ParamFloat<px4::params::MC_DES_ROLL_MIN>)  _param_des_roll_min		/**< minimum desired roll for tilting drones*/
+		(ParamFloat<px4::params::MC_DES_ROLL_MIN>)  _param_des_roll_min,	/**< minimum desired roll for tilting drones*/
+		(ParamFloat<px4::params::MC_DES_PITCH>)     _param_des_pitch,		/**< constant desired pitch, used until the topic publishes*/
+		(ParamFloat<px4::params::MC_DES_ROLL>)      _param_des_roll		/**< constant desired roll, used until the topic publishes*/
 
 		/*** END-CUSTOM ***/
 	);

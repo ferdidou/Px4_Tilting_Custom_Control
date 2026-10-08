@@ -132,5 +132,34 @@ PARAM_DEFINE_FLOAT(MC_DES_ROLL_MAX, 10.0f);
 */
 PARAM_DEFINE_FLOAT(MC_DES_ROLL_MIN, -10.0f);
 
+/**
+ * Constant desired pitch for tilting drone
+ *
+ * Body pitch held while the position controller keeps the vehicle in place, for
+ * a fully actuated tilting multirotor (CA_AIRFRAME 13, CA_TILTING_TYPE 1).
+ * Only used until the first tilting_mc_desired_angles message is received, after
+ * which that topic takes over for good. Still clamped by MC_DES_PITCH_MIN/MAX.
+ *
+ * @unit deg
+ * @min -20.0
+ * @max 20.0
+ * @decimal 1
+ * @group Multicopter Attitude Control
+*/
+PARAM_DEFINE_FLOAT(MC_DES_PITCH, 0.0f);
+
+/**
+ * Constant desired roll for tilting drone
+ *
+ * Roll counterpart of MC_DES_PITCH, with the same rules.
+ *
+ * @unit deg
+ * @min -20.0
+ * @max 20.0
+ * @decimal 1
+ * @group Multicopter Attitude Control
+*/
+PARAM_DEFINE_FLOAT(MC_DES_ROLL, 0.0f);
+
 
 /*** END-CUSTOM ***/

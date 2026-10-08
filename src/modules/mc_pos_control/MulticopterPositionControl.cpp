@@ -579,6 +579,27 @@ void MulticopterPositionControl::Run()
 								-1.0f*_param_f_max.get(), _param_f_max.get());
 				}
 
+				/* Constant angle from parameters, so a tilted hover can be commanded without
+				 * a companion computer. Dropped for good as soon as a setpoint arrives on
+				 * tilting_mc_desired_angles, which keeps the ROS 2 path untouched. */
+				if(_last_angles_setpoint == 0){
+
+					// Same gating as the topic branch below, so an H-tilting frame with
+					// MC_PITCH_ON_TILT disabled keeps its flat setpoint.
+					if((_param_tilting_type.get() == 0 && _param_mpc_pitch_on_tilt.get()) ||
+					    _param_tilting_type.get() == 1){
+
+						_tilting_mc_pitch_sp = math::constrain(math::radians(_param_des_pitch.get()),
+							math::radians(_param_des_pitch_min.get()), math::radians(_param_des_pitch_max.get()));
+					}
+
+					if(_param_tilting_type.get() == 1){
+
+						_tilting_mc_roll_sp = math::constrain(math::radians(_param_des_roll.get()),
+							math::radians(_param_des_roll_min.get()), math::radians(_param_des_roll_max.get()));
+					}
+				}
+
 				/* Consider the desired body angle */
 				if(_tilting_mc_angles_sub.updated()){
 
@@ -587,20 +608,25 @@ void MulticopterPositionControl::Run()
 					if (_tilting_mc_angles_sub.copy(&tilting_mc_angles_sp) &&
 					    (tilting_mc_angles_sp.timestamp > _last_angles_setpoint) ){
 
+						// The setpoint is in radians, the MC_DES_* limits are in degrees,
+						// so the bounds have to be converted before clamping.
+						const float pitch_min = math::radians(_param_des_pitch_min.get());
+						const float pitch_max = math::radians(_param_des_pitch_max.get());
+
 						// H-tilting multirotor
 						if(_param_tilting_type.get() == 0 && _param_mpc_pitch_on_tilt.get()){
 
 							_tilting_mc_pitch_sp = math::constrain(tilting_mc_angles_sp.pitch_body,
-								_param_des_pitch_min.get(), _param_des_pitch_max.get());
+								pitch_min, pitch_max);
 
 						}
 						else if(_param_tilting_type.get() == 1){
 
 							_tilting_mc_pitch_sp = math::constrain(tilting_mc_angles_sp.pitch_body,
-								_param_des_pitch_min.get(), _param_des_pitch_max.get());
+								pitch_min, pitch_max);
 
 							_tilting_mc_roll_sp = math::constrain(tilting_mc_angles_sp.roll_body,
-								_param_des_roll_min.get(), _param_des_roll_max.get());
+								math::radians(_param_des_roll_min.get()), math::radians(_param_des_roll_max.get()));
 
 						}
 
