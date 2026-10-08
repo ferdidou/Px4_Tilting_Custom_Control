@@ -106,6 +106,7 @@ px4_add_romfs_files(
 	25003_gazebo-classic_NDT_tilting
 	25004_gazebo-classic_NDT_tilting_interaction
 	25005_gazebo-classic_hexa_tilting
+	25006_gazebo-classic_mini_tilt_hexa
 
 	# [22000, 22999] Reserve for custom models
 )

@@ -1,0 +1,115 @@
+#!/bin/sh
+#
+# @name Mini-Tilt Hexa SITL (SMART/Saxion, 6 arms, 1 rotor + 1 tilt servo per arm)
+#
+# @type Tilting Multirotor
+# @class Copter
+#
+# @output MAIN1 motor 1
+# @output MAIN2 motor 2
+# @output MAIN3 motor 3
+# @output MAIN4 motor 4
+# @output MAIN5 motor 5
+# @output MAIN6 motor 6
+# @output MAIN7 tilt servo 1
+# @output MAIN8 tilt servo 2
+# @output MAIN9 tilt servo 3
+# @output MAIN10 tilt servo 4
+# @output MAIN11 tilt servo 5
+# @output MAIN12 tilt servo 6
+#
+# @maintainer Ferdi <ckferdi68@gmail.com>
+#
+# SITL model of the Mini-Tilt Drone. Hardware airframe: 25006_mini_tilt_hexa.
+#
+
+. ${R}etc/init.d/rc.mc_defaults
+
+param set-default CA_AIRFRAME 13 #Tilting Multirotor
+param set-default CA_TILTING_TYPE 1 #Tilting Multirotor
+
+set MAV_TYPE 13
+
+set PWM_OUT 12345678
+set PWM_AUX_OUT 1234
+
+param set-default CA_ROTOR_COUNT 6
+param set-default CA_SV_TL_COUNT 6
+
+param set-default CA_ROTOR0_PX 0.0000  #90 deg  CW
+param set-default CA_ROTOR0_PY 0.1753
+param set-default CA_ROTOR0_PZ 0.00
+param set-default CA_ROTOR0_KM -0.05
+
+param set-default CA_ROTOR1_PX 0.0000  #270 deg CCW
+param set-default CA_ROTOR1_PY -0.1753
+param set-default CA_ROTOR1_PZ 0.00
+param set-default CA_ROTOR1_KM 0.05
+
+param set-default CA_ROTOR2_PX 0.1518  #-30 deg CW
+param set-default CA_ROTOR2_PY -0.0877
+param set-default CA_ROTOR2_PZ 0.00
+param set-default CA_ROTOR2_KM -0.05
+
+param set-default CA_ROTOR3_PX -0.1518 #150 deg CCW
+param set-default CA_ROTOR3_PY 0.0877
+param set-default CA_ROTOR3_PZ 0.00
+param set-default CA_ROTOR3_KM 0.05
+
+param set-default CA_ROTOR4_PX 0.1518  #30 deg  CCW
+param set-default CA_ROTOR4_PY 0.0877
+param set-default CA_ROTOR4_PZ 0.00
+param set-default CA_ROTOR4_KM 0.05
+
+param set-default CA_ROTOR5_PX -0.1518 #210 deg CW
+param set-default CA_ROTOR5_PY -0.0877
+param set-default CA_ROTOR5_PZ 0.00
+param set-default CA_ROTOR5_KM -0.05
+
+param set-default PWM_MAIN_FUNC1 101 #esc
+param set-default PWM_MAIN_FUNC2 102
+param set-default PWM_MAIN_FUNC3 103
+param set-default PWM_MAIN_FUNC4 104
+param set-default PWM_MAIN_FUNC5 105
+param set-default PWM_MAIN_FUNC6 106
+param set-default PWM_MAIN_FUNC7 201 #tilt servo
+param set-default PWM_MAIN_FUNC8 202
+param set-default PWM_MAIN_FUNC9 203
+param set-default PWM_MAIN_FUNC10 204
+param set-default PWM_MAIN_FUNC11 205
+param set-default PWM_MAIN_FUNC12 206
+
+param set-default CA_SV_TL0_MAXA 30
+param set-default CA_SV_TL0_MINA -30
+param set-default CA_SV_TL1_MAXA 30
+param set-default CA_SV_TL1_MINA -30
+param set-default CA_SV_TL2_MAXA 30
+param set-default CA_SV_TL2_MINA -30
+param set-default CA_SV_TL3_MAXA 30
+param set-default CA_SV_TL3_MINA -30
+param set-default CA_SV_TL4_MAXA 30
+param set-default CA_SV_TL4_MINA -30
+param set-default CA_SV_TL5_MAXA 30
+param set-default CA_SV_TL5_MINA -30
+
+param set-default MPC_THR_HOVER 0.09
+param set-default MPC_THR_MIN 0.04
+
+param set-default MPC_XY_P 1.5
+param set-default MPC_XY_VEL_P_ACC 8.0
+param set-default MPC_XY_VEL_I_ACC 1.5
+
+param set-default MC_ROLLRATE_P 0.08
+param set-default MC_ROLLRATE_D 0.0004
+param set-default MC_PITCHRATE_P 0.08
+param set-default MC_PITCHRATE_D 0.0004
+
+param set-default CA_TILT_FZ_MIN 0.02
+
+param set-default MPC_TILTMAX_AIR 20.0
+param set-default MPC_TKO_SPEED 0.3
+param set-default MPC_LAND_SPEED 0.25
+param set-default MPC_Z_VEL_MAX_DN 3.0
+param set-default MPC_Z_V_AUTO_DN 3.0
+param set-default LNDMC_Z_VEL_MAX 0.2083333
+param set-default IMU_INTEG_RATE 200

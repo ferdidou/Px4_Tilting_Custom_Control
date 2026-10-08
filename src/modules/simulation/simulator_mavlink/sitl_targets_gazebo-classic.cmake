@@ -110,6 +110,7 @@ if(gazebo_FOUND)
 		baby_k
 		NDT_tilting_interaction
 		hexa_tilting
+		mini_tilt_hexa
 	)
 
 	set(worlds
