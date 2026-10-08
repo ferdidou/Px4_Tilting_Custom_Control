@@ -610,7 +610,7 @@ ControlAllocator::Run()
 	// Publish status at limited rate, as it's somewhat expensive and we use it for slower dynamics
 	// (i.e. anti-integrator windup)
 	if (now - _last_status_pub >= 5_ms) {
-		publish_control_allocator_status(0);
+		//publish_control_allocator_status(0);
 
 		if (_num_control_allocation > 1) {
 			publish_control_allocator_status(1);
