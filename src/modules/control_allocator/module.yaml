@@ -60,6 +60,19 @@ parameters:
                 0: One tilt
                 1: Fully actuated
             default: 0
+
+        CA_TILT_FZ_MIN:
+            description:
+                short: Minimum rotor vertical force to command a tilt angle
+                long: |
+                  Below this value the tilt angle atan(lateral / vertical) is ill-conditioned,
+                  so the servo is commanded to 0 instead.
+            type: float
+            decimal: 3
+            increment: 0.01
+            min: 0.0
+            max: 1.0
+            default: 0.1
         #*** END-CUSTOM ***
 
         # Motor parameters

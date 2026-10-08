@@ -236,7 +236,8 @@ private:
 		// CUSTOM
 		(ParamInt<px4::params::CA_TILTING_TYPE>) _param_tilting_type,	/**< 0: H-tilt, 1: omnidirectional */
 		(ParamInt<px4::params::CA_SV_TL_COUNT>) _param_servo_count,
-		(ParamInt<px4::params::CA_ROTOR_COUNT>) _param_rotor_count
+		(ParamInt<px4::params::CA_ROTOR_COUNT>) _param_rotor_count,
+		(ParamFloat<px4::params::CA_TILT_FZ_MIN>) _param_tilt_fz_min	/**< min vertical force to command a tilt angle */
 	)
 
 };

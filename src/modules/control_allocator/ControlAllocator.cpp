@@ -537,17 +537,18 @@ ControlAllocator::Run()
 			_tilt_debug.id = 0;
 			_tilt_debug.data[3*_num_actuators[0]] = torque_scale;
 
+			// Below this vertical force the tilt angle atan(lateral/vertical) is ill-conditioned
+			const float tilt_fz_min = _param_tilt_fz_min.get();
+
 			for(int i=0; i<_num_actuators[0]; i++){
 
 				// Even indeces correspond to vertical forces
 				actuator_sp(i) = sqrtf( sqrtf( powf(vertlat_actuator_sp(2*i),2) + powf(vertlat_actuator_sp(2*i+1),2) ) );
 
-				// TO DO: add a parameter for the threshold or solve that problem
-
 				// One tilt servo per rotor: works for both the 4-servo X8 (num_actuators[1]==4)
 				// and the 6-servo tilting hexa (num_actuators[1]==6) without hardcoding.
 				if(i < _num_actuators[1]){
-					if( vertlat_actuator_sp(2*i) < 0.1f)
+					if( vertlat_actuator_sp(2*i) < tilt_fz_min)
 						servo_sp(i) = 0.0f;
 					else
 						servo_sp(i) = atanf(vertlat_actuator_sp(2*i+1)/vertlat_actuator_sp(2*i));
